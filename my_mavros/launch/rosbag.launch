@@ -1,0 +1,64 @@
+<launch>
+    <!--Seleccione la cantidad de drones a spawnear-->
+    <arg name="ns0"             default="uav0" />
+    <arg name="ns1"             default="uav1" />
+    <arg name="ns2"             default="uav2" />
+    <arg name="ns3"             default="uav3" />
+
+    <!--La visualización (solo aplica para el primer dron)-->
+    <arg name="rviz"            default="true" />
+    <arg name="rviz_cfg"        default="$(find my_mavros)/scripts/config/cylinder.rviz" />
+    <arg name="rtabmapviz"      default="false" />
+
+    <!--Los bag-file y data-bases donde guardará la grabación-->
+    <arg name="bag_file"        default="$(find my_mavros)/recordings/cylinder/recording.bag" />
+
+    <!-- WARNING: LAS DB SE SOBRESCRIBIRÁN-->
+    <arg name="database0"       default="$(find my_mavros)/recordings/default/$(arg ns0).db" />
+    <arg name="database1"       default="$(find my_mavros)/recordings/default/$(arg ns1).db" />
+    <arg name="database2"       default="$(find my_mavros)/recordings/default/$(arg ns2).db" />
+    <arg name="database3"       default="$(find my_mavros)/recordings/default/$(arg ns3).db" />
+
+    <!--Corremos el rosbag pausado, apriete SPACE para iniciarlo, una vez que se hayan ejecutado todos los programas-->
+    <node pkg="rosbag" type="play" name="player" output="screen" args="--clock --pause $(arg bag_file)"/>
+
+    <!-- Inicio los RTAB-MAP -->
+    <group ns="$(arg ns0)">
+        <include file="$(find my_mavros)/launch/rtab.launch" >
+            <arg name="rviz"            value="$(arg rviz)" />
+            <arg name="rviz_cfg"        value="$(arg rviz_cfg)" />
+            <arg name="rtabmapviz"      value="$(arg rtabmapviz)" />
+            
+            <arg name="ns"              value="$(arg ns0)" />
+            <arg name="recording"       value="true" />
+            <arg name="database"        value="$(arg database0)" />
+        </include>
+    </group>
+
+    <group ns="$(arg ns1)">
+        <include file="$(find my_mavros)/launch/rtab.launch" >
+            <arg name="ns"              value="$(arg ns1)" />
+            <arg name="recording"       value="true" />
+            <arg name="database"        value="$(arg database1)" />
+        </include>
+    </group>
+
+    <group ns="$(arg ns2)">
+        <include file="$(find my_mavros)/launch/rtab.launch" >
+            <arg name="ns"              value="$(arg ns2)" />
+            <arg name="recording"       value="true" />
+            <arg name="database"        value="$(arg database2)" />
+        </include>
+    </group>
+
+    <group ns="$(arg ns3)">
+        <include file="$(find my_mavros)/launch/rtab.launch" >
+            <arg name="ns"              value="$(arg ns3)" />
+            <arg name="recording"       value="true" />
+            <arg name="database"        value="$(arg database3)" />
+        </include>
+    </group>
+
+    <!--Para añadir más drones: Agregue un argumento nsx, un argumento dbx, e instancie otro grupo "x"-->
+
+</launch>

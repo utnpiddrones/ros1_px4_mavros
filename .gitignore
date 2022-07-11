@@ -1,0 +1,19 @@
+#Repo de PX4-Autopilot
+PX4-Autopilot
+
+#Repo de g2o
+openslam_g2o
+
+#Algunas carpetas auxiliares del developer ;)
+my_mavros/junk/
+my_mavros/outputs/*
+
+*my_mavros/recordings/*
+!my_mavros/recordings/default
+my_mavros/recordings/default/*
+
+test.txt
+
+
+#Todos los archivos .bag (pesan Gbs)
+*.bag

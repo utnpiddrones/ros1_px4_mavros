@@ -1,0 +1,71 @@
+<launch>
+    <!-- ESTE ARCHIVO NO DEBE SER MODIFICADO POR EL USUARIO-->
+        
+    <!--Inputs-->
+    <arg name="ns"          default="uav0" /> <!--Namespace del dron-->
+    <arg name="ID"          default="0" /> <!--ID: debe ser un número entre 0 y 9-->
+
+    <arg name="x"           default="0" /> <!--Posicion donde spawnea en la simulacion-->
+    <arg name="y"           default="0" />
+    <arg name="z"           default="0" />
+    <arg name="R"           default="0" />
+    <arg name="P"           default="0" />
+    <arg name="Y"           default="0" />
+
+    <arg name="vehicle"     default="iris" /> <!--Modelo de PX4-->
+    <arg name="sdf"         default="$(find my_mavros)/models/drone_utn/'drone_utn (kinect).sdf'" /> <!--Path a sdf-->
+    <arg name="est"         default="ekf2"/> <!--Tipo de estimador (filtro)-->
+
+    <arg name="rtab"        default="false" /> <!--Inicia o no rtabmap-->
+    <arg name="rviz"        default="false" />
+    <arg name="rviz_cfg"    default="$(find my_mavros)/scripts/rviz_config.rviz" />
+    
+    <group ns="$(arg ns)">
+        <arg name="mavlink_udp_port"    value="1456$(arg ID)"/>
+        <arg name="mavlink_tcp_port"    value="456$(arg ID)"/>
+        <env name="PX4_SIM_MODEL"       value="$(arg vehicle)" />
+        <env name="PX4_ESTIMATOR"       value="$(arg est)" />
+        <param name="model_description" command="xmlstarlet ed
+        -u '//plugin[@name=&quot;mavlink_interface&quot;]/mavlink_tcp_port' -v $(arg mavlink_tcp_port)
+        -u '//plugin[@name=&quot;mavlink_interface&quot;]/mavlink_udp_port' -v $(arg mavlink_udp_port)
+        -u '//plugin[@name=&quot;camera_plugin&quot;]/imageTopicName' -v /$(arg ns)/camera/color/image_raw
+        -u '//plugin[@name=&quot;camera_plugin&quot;]/cameraInfoTopicName' -v /$(arg ns)/camera/color/camera_info
+        -u '//plugin[@name=&quot;camera_plugin&quot;]/depthImageTopicName' -v /$(arg ns)/camera/depth/image_raw
+        -u '//plugin[@name=&quot;camera_plugin&quot;]/depthImageCameraInfoTopicName' -v /$(arg ns)/camera/depth/camera_info
+        -u '//plugin[@name=&quot;camera_plugin&quot;]/pointCloudTopicName' -v /$(arg ns)/camera/depth/points
+        -u '//plugin[@name=&quot;camera_plugin&quot;]/frameName' -v /$(arg ns)_camera_link
+        $(arg sdf)"/>  <!--Crea una copia del archivo sdf con parámetros cambiados-->
+
+        <!-- PX4 SITL-->
+        <arg name="interactive" default="true"/> <!--Permite interactuar con el dron por consola de PX4-->
+        <arg unless="$(arg interactive)" name="px4_command_arg1" value=""/>
+        <arg if="$(arg interactive)" name="px4_command_arg1" value="-d"/>
+        <node name="sitl_$(arg ID)" pkg="px4" type="px4" output="screen" args="$(find px4)/build/px4_sitl_default/etc -s etc/init.d-posix/rcS -i $(arg ID) -w sitl_$(arg vehicle)_$(arg ID) $(arg px4_command_arg1)" />
+       
+        <!-- Spawn vehicle -->
+        <node name="$(arg vehicle)_$(arg ID)_spawn" output="screen" pkg="gazebo_ros" type="spawn_model" args="-sdf -param model_description -model $(arg vehicle)_$(arg ID) -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg R) -P $(arg P) -Y $(arg Y)"/>
+
+        <!-- MAVROS -->
+        <include file="$(find mavros)/launch/px4.launch">
+            <arg name="fcu_url"         value="udp://:1454$(arg ID)@localhost:1458$(arg ID)"/>
+            <arg name="gcs_url"         value=""/>
+            <arg name="tgt_system"      value="$(eval 1 + arg('ID'))"/>
+            <arg name="tgt_component"   value="1"/>
+        </include>
+
+        <!--Arbol de transformadas-->
+        <include file="$(find my_mavros)/launch/frames.launch">
+            <arg name="ns"              value="$(arg ns)" />
+        </include>
+
+        <!--Inicia el main del dron-->
+        <node name="$(arg ns)_control" pkg="my_mavros" type="dron_main" args="$(arg ns)"/>
+
+        <!--Inicio RTab-Map-->
+        <include if="$(arg rtab)" file="$(find my_mavros)/launch/rtab.launch" >
+            <arg name="ns"              value="$(arg ns)" />
+            <arg name="rviz"            value="$(arg rviz)" />
+            <arg name="rviz_cfg"        value="$(arg rviz_cfg)" />
+        </include>
+    </group>
+</launch>

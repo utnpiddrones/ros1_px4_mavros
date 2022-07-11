@@ -1,0 +1,49 @@
+<launch>
+    <!--NO MODIFICAR-->
+    
+    <arg name="ns"              default="uav0" />
+
+    <!--Recording-->
+    <arg name="recording"       default="false" />
+    <arg name="database"        default="$(find my_mavros)/recordings/default/$(arg ns).db" />
+
+    <!--Visualización-->
+    <arg name="rviz"            default="false" />
+    <arg name="rviz_cfg"        default="$(find my_mavros)/scripts/config/cylinder.rviz" />
+    <arg name="rtabmapviz"      default="false" />
+
+<!-- Inicio el rtabmap -->
+    <include file="$(find rtabmap_ros)/launch/rtabmap.launch">
+        <!--Elijo la visualización-->
+        <arg name="rtabmapviz"  value="$(arg rtabmapviz)" />
+        <arg name="rviz"        value="$(arg rviz)" />
+        <arg if="$(arg rviz)"   name="rviz_cfg"  value="$(arg rviz_cfg)" />
+
+        <!--Sin que saque datos de odometría por la cámara o por lidar-->
+        <arg name="visual_odometry"         value="false"/>
+        <arg name="icp_odometry"            value="false"/>
+
+        <!--Sin datos de mapeo previos-->
+        <arg name="args"                    value="-d" />
+
+        <arg name="database_path"           value="$(arg database)" />
+        <arg name="use_sim_time"            value="$(arg recording)"/> <!--Poner en true al usar un rosbag-->
+
+        <!--Nombre de los frames en el arbol TF-->
+        <!--<arg name="ground_truth_frame_id"   value="earth"/>-->
+        <arg name="map_frame_id"            value="$(arg ns)_map"/>
+        <arg name="odom_frame_id"           value="$(arg ns)_odom"/>
+        <arg name="frame_id"                value="$(arg ns)_base_link" />
+
+        <!--Que no publica nada en el arbol TF, ya me ocupo yo-->
+        <arg name="publish_tf_map"          value="false"/>
+        <arg name="publish_tf_odom"         value="false"/>
+        
+        <!--Topics donde publican los datos la cámara-->
+        <arg name="rgb_topic"               value="/$(arg ns)/camera/color/image_raw" />
+        <arg name="depth_topic"             value="/$(arg ns)/camera/depth/image_raw" />
+        <arg name="camera_info_topic"       value="/$(arg ns)/camera/color/camera_info" />
+        <arg name="depth_camera_info_topic" value="/$(arg ns)/camera/depth/camera_info" />
+   
+    </include>
+</launch>

@@ -1,0 +1,16 @@
+<launch>
+    <!-- NO MODIFICAR -->
+    
+    <!--Inputs-->
+    <arg name="ns" default="uav0" />
+
+    <!--Other things-->
+    <arg name="pi/2" value="1.5707963267948966" />
+
+    <!--Frames estáticos-->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="tf_base_to_camera" args="0 0 0.08 -$(arg pi/2) 0 -$(arg pi/2) $(arg ns)_base_link $(arg ns)_camera_link" />
+    <node pkg="tf2_ros" type="static_transform_publisher" name="tf_base_to_imu" args="0 0 0 0 0 0 $(arg ns)_base_link $(arg ns)_imu_link" />
+</launch>
+
+<!--Frame estático declarado en el tree frame-->
+<!--Cámara apuntando hacia las +x   0 0 0 -1.57 0 -1.57   -->

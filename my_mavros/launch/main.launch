@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<launch>
+    <!--Coordenadas GPS del frame earth-->
+    <arg name="latitude"    default="-34.660019" />
+    <arg name="longitude"   default="-58.468302" />
+    <arg name="amsl"        default="14" /> <!--En AMSL (average mean sea level)-->
+
+    <!--Vehículo y mundo a ejecutar -->
+    <arg name="world"       default="$(find my_mavros)/worlds/cylinder.world"/>
+    <arg name="est"         default="ekf2"/>
+    <arg name="vehicle"     default="iris"/>
+    <arg name="sdf"         default="$(find my_mavros)/models/drone_utn/'drone_utn (kinect).sdf'" />
+
+    <!--Configuraciones de GAZEBO-->
+    <arg name="gui"         default="true"/>
+    <arg name="debug"       default="false"/>
+    <arg name="verbose"     default="false"/>
+    <arg name="paused"      default="false"/>
+
+    <!--Configuraciones de RVIZ (Note: para la visualización, es necesario que rtab del uav0 esté en true)-->
+    <arg name="rviz"        default="true" />
+    <arg name="rviz_cfg"    default="$(find my_mavros)/scripts/config/cylinder.rviz" />
+
+    <!--Inicializa los drones-->
+    <include file="$(find my_mavros)/launch/spawn_dron.launch">
+        <arg name="ns"          value="uav0" />
+        <arg name="ID"          value="0" />
+        <arg name="vehicle"     value="$(arg vehicle)" />
+        <arg name="sdf"         value="$(arg sdf)" />
+        <arg name="est"         value="$(arg est)" />
+        <arg name="rtab"        value="true" />
+        <arg name="x"           value="1" />
+        <arg name="y"           value="0" />
+        <arg name="z"           value="0" />
+        <arg name="R"           value="0" />
+        <arg name="P"           value="0" />
+        <arg name="Y"           value="0" />
+
+        <arg name="rviz"        value="$(arg rviz)" />
+        <arg name="rviz_cfg"    value="$(arg rviz_cfg)" />
+    </include>
+
+    <include file="$(find my_mavros)/launch/spawn_dron.launch">
+        <arg name="ns"          value="uav1" />
+        <arg name="ID"          value="1" />
+        <arg name="vehicle"     value="$(arg vehicle)" />
+        <arg name="sdf"         value="$(arg sdf)" />
+        <arg name="est"         value="$(arg est)" />
+        <arg name="rtab"        value="true" />
+        <arg name="x"           value="0" />
+        <arg name="y"           value="1" />
+        <arg name="z"           value="0" />
+        <arg name="R"           value="0" />
+        <arg name="P"           value="0" />
+        <arg name="Y"           value="1.5710" />
+    </include>
+
+    <include file="$(find my_mavros)/launch/spawn_dron.launch">
+        <arg name="ns"          value="uav2" />
+        <arg name="ID"          value="2" />
+        <arg name="vehicle"     value="$(arg vehicle)" />
+        <arg name="sdf"         value="$(arg sdf)" />
+        <arg name="est"         value="$(arg est)" />
+        <arg name="rtab"        value="false" />
+        <arg name="x"           value="-1" />
+        <arg name="y"           value="0" />
+        <arg name="z"           value="0" />
+        <arg name="R"           value="0" />
+        <arg name="P"           value="0" />
+        <arg name="Y"           value="3.1416" />
+    </include>
+
+    <include file="$(find my_mavros)/launch/spawn_dron.launch">
+        <arg name="ns"          value="uav3" />
+        <arg name="ID"          value="3" />
+        <arg name="vehicle"     value="$(arg vehicle)" />
+        <arg name="sdf"         value="$(arg sdf)" />
+        <arg name="est"         value="$(arg est)" />
+        <arg name="rtab"        value="false" />
+        <arg name="x"           value="0" />
+        <arg name="y"           value="-1" />
+        <arg name="z"           value="0" />
+        <arg name="R"           value="0" />
+        <arg name="P"           value="0" />
+        <arg name="Y"           value="-1.5710" />
+    </include>
+
+    <!--    NO MODIFICAR A PARTIR DE ESTE PUNTO   -->
+    <!--Carga las coordenadas GPS en el parameter server y en el world de Gazebo-->
+    <group ns="earth">
+        <param name="latitude"      value="$(arg latitude)" />
+        <param name="longitude"     value="$(arg longitude)" />
+        <param name="amsl"          value="$(arg amsl)" />
+        <param name="cmd"           command="xmlstarlet ed --inplace
+            -d '//spherical_coordinates'
+            -s '//world' -t elem -n spherical_coordinates
+            -s '//world/spherical_coordinates' -t elem -n surface_model -v EARTH_WGS84
+            -s '//world/spherical_coordinates' -t elem -n latitude_deg -v $(arg latitude)
+            -s '//world/spherical_coordinates' -t elem -n longitude_deg -v $(arg longitude)
+            -s '//world/spherical_coordinates' -t elem -n elevation -v $(arg amsl)
+            $(arg world)" />
+    </group>
+    
+    <!-- Gazebo sim -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="gui"         value="$(arg gui)"/>
+        <arg name="world_name"  value="$(arg world)"/>
+        <arg name="debug"       value="$(arg debug)"/>
+        <arg name="verbose"     value="$(arg verbose)"/>
+        <arg name="paused"      value="$(arg paused)"/>
+    </include>
+</launch>
+
+<!-- to add more UAVs (up to 10):
+Increase the id
+Change the name space
+Set the FCU to default="udp://:14540+id@localhost:14550+id"
+Set the malink_udp_port to 14560+id) -->
