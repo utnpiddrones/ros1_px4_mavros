@@ -35,6 +35,11 @@ $ chmod +x ./QGroundControl.AppImage
 
 5. Descargar la grabación desde esta carpeta [recording.bag](https://drive.google.com/drive/folders/0B_pJsLitsr5LfkFnS3Jtc0I4S0lFeDg4V0g5cGZkSE9uWlo3N1paUWJ5Y2F4THJQREdZOFE?resourcekey=0-CHHLCWXkxk7UCQDFhNr7CQ&usp=sharing) y ubicarla dentro de la carpeta `my_mavros/recordings/cylinder`. En esta carpeta también están los videos y las bases de datos de la simulación.
 
+6. Descargue la imagen de Docker:
+```sh
+$ docker pull ncotti/uav_slam_ros:1.0.0
+```
+
 ## Ejecución
 
 1. Ejecute el script para correr el container dentro de la carpeta Docker
