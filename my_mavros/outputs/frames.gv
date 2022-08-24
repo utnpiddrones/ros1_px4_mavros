@@ -1,0 +1,29 @@
+digraph G {
+"uav0_base_link" -> "uav0_camera_link"[label=" Broadcaster: /player\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"uav0_odom" -> "uav0_base_link"[label=" Broadcaster: /player\nAverage rate: 29.4\nBuffer length: 4.864\nMost recent transform: 1378.164\nOldest transform: 1373.3\n"];
+"earth" -> "uav0_map"[label=" Broadcaster: /player\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"uav0_base_link" -> "uav0_imu_link"[label=" Broadcaster: /player\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"map" -> "map_ned"[label=" Broadcaster: /player\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"odom" -> "odom_ned"[label=" Broadcaster: /player\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"base_link" -> "base_link_frd"[label=" Broadcaster: /player\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"uav1_base_link" -> "uav1_camera_link"[label=" Broadcaster: /player\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"uav1_odom" -> "uav1_base_link"[label=" Broadcaster: /player\nAverage rate: 29.412\nBuffer length: 4.896\nMost recent transform: 1378.184\nOldest transform: 1373.288\n"];
+"uav1_base_link" -> "uav1_imu_link"[label=" Broadcaster: /player\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"uav2_base_link" -> "uav2_imu_link"[label=" Broadcaster: /player\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"uav2_odom" -> "uav2_base_link"[label=" Broadcaster: /player\nAverage rate: 29.4\nBuffer length: 4.864\nMost recent transform: 1378.172\nOldest transform: 1373.308\n"];
+"earth" -> "uav2_map"[label=" Broadcaster: /player\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"uav2_base_link" -> "uav2_camera_link"[label=" Broadcaster: /player\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"uav3_base_link" -> "uav3_camera_link"[label=" Broadcaster: /player\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"uav3_odom" -> "uav3_base_link"[label=" Broadcaster: /player\nAverage rate: 29.436\nBuffer length: 4.892\nMost recent transform: 1378.184\nOldest transform: 1373.292\n"];
+"uav3_base_link" -> "uav3_imu_link"[label=" Broadcaster: /player\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"earth" -> "uav3_map"[label=" Broadcaster: /player\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"earth" -> "uav1_map"[label=" Broadcaster: /player\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"uav2_map" -> "uav2_odom"[label=" Broadcaster: /player\nAverage rate: 48.571\nBuffer length: 4.9\nMost recent transform: 1378.16\nOldest transform: 1373.26\n"];
+"uav1_map" -> "uav1_odom"[label=" Broadcaster: /player\nAverage rate: 48.975\nBuffer length: 4.88\nMost recent transform: 1378.148\nOldest transform: 1373.268\n"];
+"uav3_map" -> "uav3_odom"[label=" Broadcaster: /player\nAverage rate: 47.998\nBuffer length: 4.896\nMost recent transform: 1378.156\nOldest transform: 1373.26\n"];
+"uav0_map" -> "uav0_odom"[label=" Broadcaster: /player\nAverage rate: 48.361\nBuffer length: 4.88\nMost recent transform: 1378.164\nOldest transform: 1373.284\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1660496667.8380353"[ shape=plaintext ] ;
+}->"earth";
+}

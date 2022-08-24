@@ -6,14 +6,15 @@ openslam_g2o
 
 #Algunas carpetas auxiliares del developer ;)
 my_mavros/junk/
-my_mavros/outputs/*
 
-*my_mavros/recordings/*
-!my_mavros/recordings/default
-my_mavros/recordings/default/*
+my_mavros/recordings/cylinder/recording.bag
+my_mavros/recordings/default/*.db
+!my_mavros/recordings/defualt/.gitkeep
+
 
 test.txt
 
 
 #Todos los archivos .bag (pesan Gbs)
 *.bag
+*.AppImage

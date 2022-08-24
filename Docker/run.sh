@@ -20,6 +20,7 @@ docker run -i -t --rm --privileged \
        -v "$(pwd)/../my_mavros:/home/user/catkin_my_mavros/src/my_mavros" \
        -v "$(pwd)/my_entrypoint.sh:/my_entrypoint.sh" \
        -v "$(pwd)/init.sh:/init.sh" \
+       -v "$(pwd)/QGroundControl.AppImage:/home/user/QGroundControl.AppImage" \
        ncotti/uav_slam_ros:1.0.0 \
        /bin/bash
 

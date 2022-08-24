@@ -27,10 +27,13 @@ Los datos guardados de la simulación ejecutada y de la formación de los mapas 
 $ git clone https://gitlab.frba.utn.edu.ar/utnbadrone/mavros_and_px4.git
 ```
 
-4. Ejecute el script de instalación dentro de la carpeta Docker.
+4. Descargue un ejecutable de [QGroundCOntrol.AppImage](https://d176tv9ibo4jno.cloudfront.net/latest/QGroundControl.AppImage) y colóquelo dentro de la carpeta Docker, dándole permisos de ejecución:
+```sh
+# Dentro de la carpeta Docker
+$ chmod +x ./QGroundControl.AppImage
 ```
-$ cd Docker && ./install.sh
-```
+
+5. Descargar la grabación desde esta carpeta [recording.bag](https://drive.google.com/drive/folders/0B_pJsLitsr5LfkFnS3Jtc0I4S0lFeDg4V0g5cGZkSE9uWlo3N1paUWJ5Y2F4THJQREdZOFE?resourcekey=0-CHHLCWXkxk7UCQDFhNr7CQ&usp=sharing) y ubicarla dentro de la carpeta `my_mavros/recordings/cylinder`. En esta carpeta también están los videos y las bases de datos de la simulación.
 
 ## Ejecución
 
@@ -45,7 +48,7 @@ $ rosrun my_mavros menu
 ```
 Esta interfaz ejecuta los scripts que se encuentran dentro del container en la dirección "/home/user/catkin_my_mavros/src/my_mavros/scripts"
 
-3. Si quiere ejecutar múltiples terminales para un mismo contenedor, utilize el script dentro de la carpeta "Docker" y, una vez dentro del contenedor debe ejecutar otro comando:
+3. Si quiere ejecutar múltiples terminales para un mismo contenedor:
 ```
 $ ./new_terminal.sh
 $ source /init.sh   #Dentro del contenedor
